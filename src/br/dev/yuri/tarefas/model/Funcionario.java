@@ -16,10 +16,13 @@ public class Funcionario {
 	}
 
 	public Funcionario(String cargo, String nome) {
+		this.nome = nome;
 		this.cargo = cargo;
 	}
 
 	public Funcionario(String cargo, String nome, int matricula) {
+		this.nome = nome;
+		this.cargo = cargo;
 		this.matricula = matricula;
 	}
 
@@ -49,7 +52,7 @@ public class Funcionario {
 
 	@Override
 	public String toString() {
-		String funcionario = matricula + " , " + nome + " , " + cargo;
+		String funcionario = matricula + " , " + nome + " , " + cargo + "/n";
 		return funcionario;
 	}
 
