@@ -1,29 +1,36 @@
 package br.dev.yuri.tarefas.model;
 
+import br.dev.yuri.tarefas.utils.Utils;
+
 public class Funcionario {
 
 	private String nome;
-	private int matricula;
+	private String matricula;
 	private String cargo;
+	private double salario;
 
 	// metodo construtor
 	public Funcionario(String nome) {
 		this.nome = nome;
+		this.matricula = Utils.gerarUUID8();
 	}
 
 	public Funcionario() {
+		this.matricula = Utils.gerarUUID8();
 
 	}
 
 	public Funcionario(String cargo, String nome) {
 		this.nome = nome;
 		this.cargo = cargo;
+		this.matricula = Utils.gerarUUID8();
 	}
 
-	public Funcionario(String cargo, String nome, int matricula) {
+	public Funcionario(String cargo, String nome, int matricula, double salario) {
 		this.nome = nome;
 		this.cargo = cargo;
-		this.matricula = matricula;
+		this.matricula = Utils.gerarUUID8();
+		this.salario = salario;
 	}
 
 	public String getNome() {
@@ -34,11 +41,11 @@ public class Funcionario {
 		this.nome = nome;
 	}
 
-	public int getMatricula() {
+	public String getMatricula() {
 		return matricula;
 	}
 
-	public void setMatricula(int matricula) {
+	public void setMatricula(String matricula) {
 		this.matricula = matricula;
 	}
 
@@ -50,9 +57,17 @@ public class Funcionario {
 		this.cargo = cargo;
 	}
 
+	public double getSalario() {
+		return salario;
+	}
+
+	public void setSalario(double salario, int i) {
+		this.salario = salario;
+	}
+
 	@Override
 	public String toString() {
-		String funcionario = matricula + " , " + nome + " , " + cargo + "/n";
+		String funcionario = matricula + " , " + nome + " , " + cargo + salario + "/n";
 		return funcionario;
 	}
 
