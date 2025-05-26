@@ -19,7 +19,7 @@ public class Main {
 		//f.setCargo("Programador Jr");
 		//f.setSalario(1989, 73);
 
-		FuncionarioDAO dao = new FuncionarioDAO();
+		FuncionarioDAO dao = new FuncionarioDAO(f);
 		dao.gravar();
 
 		System.out.println(Utils.gerarUUID8);

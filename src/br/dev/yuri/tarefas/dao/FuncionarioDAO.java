@@ -16,7 +16,10 @@ public class FuncionarioDAO {
 		this.funcionario = funcionario;
 	}
 
-	public void gravar() {
+	public void gravar() 
+	
+	
+	{
 		try {
 			FileFactory ff = new FileFactory();
 			ff.getBufferedWriter().write("");
