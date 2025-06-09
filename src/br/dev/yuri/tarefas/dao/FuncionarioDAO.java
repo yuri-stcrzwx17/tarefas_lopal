@@ -7,7 +7,7 @@ public class FuncionarioDAO {
 
 	private FuncionarioDAO {
 
-	private Funcionario funcionario;
+	public Funcionario funcionario;
 
 	public FuncionarioDAO() {
 	}

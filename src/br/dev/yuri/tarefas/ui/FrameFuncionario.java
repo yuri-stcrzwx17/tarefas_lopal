@@ -104,8 +104,6 @@ public class FrameFuncionario {
 				
 			}
 		) {
-			
-		}
 		
 		tela.setVisible(true);
 	}

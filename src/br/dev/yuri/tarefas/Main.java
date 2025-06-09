@@ -11,7 +11,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		new FrameFuncionario();
+		//new FrameFuncionario();
 
 		//Funcionario f = new Funcionario();
 		//Funcionario f2 = new Funcionario("Yuri");
@@ -19,6 +19,7 @@ public class Main {
 		//f.setCargo("Programador Jr");
 		//f.setSalario(1989, 73);
 
+		Funcionario f = null;
 		FuncionarioDAO dao = new FuncionarioDAO(f);
 		dao.gravar();
 
