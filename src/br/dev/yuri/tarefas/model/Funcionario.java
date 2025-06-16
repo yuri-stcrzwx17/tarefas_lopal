@@ -1,5 +1,7 @@
 package br.dev.yuri.tarefas.model;
 
+import javax.imageio.plugins.tiff.GeoTIFFTagSet;
+
 import br.dev.yuri.tarefas.utils.Utils;
 
 public class Funcionario {
@@ -10,64 +12,73 @@ public class Funcionario {
 	private double salario;
 
 	// metodo construtor
+
 	public Funcionario(String nome) {
 		this.nome = nome;
 		this.matricula = Utils.gerarUUID8();
+
 	}
 
+	// Constutor Padrão / Default
 	public Funcionario() {
 		this.matricula = Utils.gerarUUID8();
 
 	}
 
 	public Funcionario(String cargo, String nome) {
-		this.nome = nome;
 		this.cargo = cargo;
+		this.nome = nome;
 		this.matricula = Utils.gerarUUID8();
 	}
 
-	public Funcionario(String cargo, String nome, int matricula, double salario) {
-		this.nome = nome;
-		this.cargo = cargo;
+	public Funcionario(String cargo, String nome, double salario) {
 		this.matricula = Utils.gerarUUID8();
+		this.cargo = cargo;
+		this.nome = nome;
 		this.salario = salario;
 	}
 
 	public String getNome() {
 		return nome;
+
 	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
+
 	}
 
 	public String getMatricula() {
 		return matricula;
+
 	}
 
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
-	}
 
-	public String getCargo() {
-		return cargo;
 	}
 
 	public void setCargo(String cargo) {
 		this.cargo = cargo;
+	}
+	
+
+	public String getCargo() {
+		return cargo;
+
 	}
 
 	public double getSalario() {
 		return salario;
 	}
 
-	public void setSalario(double salario, int i) {
+	public void setSalario(double salario) {
 		this.salario = salario;
 	}
 
 	@Override
 	public String toString() {
-		String funcionario = matricula + " , " + nome + " , " + cargo + salario + "/n";
+		String funcionario = matricula + "," + nome + "," + cargo + "," + salario + "\n";
 		return funcionario;
 	}
 
