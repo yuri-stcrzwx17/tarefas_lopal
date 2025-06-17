@@ -1,105 +1,172 @@
 package br.dev.yuri.tarefas.ui;
 
-	import javax.swing.*;
-	import java.awt.*;
-	import java.awt.event.ActionEvent;
-	import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.text.MaskFormatter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.text.ParseException;
 
- 
-public class TelaTarefas  extends JFrame {
+public class TelaTarefas extends JFrame {
 
-	    public TelaTarefas() {
-	        setTitle("Gerenciador de Tarefas");
-	        setSize(600, 500);
-	        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        setLocationRelativeTo(null);
-	        // Original tava 500, 400
-	        
-	        // Painel principal com borda e layout
-	        JPanel mainPanel = new JPanel();
-	        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-	        
-	        // Título da tela
-	        JLabel tituloSecao = new JLabel("Cadastro de tarefas");
-	        tituloSecao.setFont(new Font("Arial", Font.BOLD, 20));
-	        tituloSecao.setAlignmentX(Component.CENTER_ALIGNMENT);
-	        
-	        // Campos do formulário
-	        JPanel formPanel = new JPanel();
-	        formPanel.setLayout(new GridLayout(0, 2, 10, 10));
-	        
-	        // Título
-	        formPanel.add(new JLabel("Título"));
-	        JTextField tituloField = new JTextField();
-	        formPanel.add(tituloField);
-	        
-	        // Descrição
-	        formPanel.add(new JLabel("Descrição"));
-	        JTextArea descricaoArea = new JTextArea(3, 20);
-	       
-	        // Data Inicial
-	        formPanel.add(new JLabel("Data Inicial"));
-	        JTextField dataInicialField = new JTextField();
-	        formPanel.add(dataInicialField);
-	        
-	        // Prazo
-	        formPanel.add(new JLabel("Prazo"));
-	        JTextField prazoField = new JTextField();
-	        formPanel.add(prazoField);
-	        
-	        // Data Conclusão
-	        formPanel.add(new JLabel("Data conclusão"));
-	        JTextField dataConclusaoField = new JTextField();
-	        formPanel.add(dataConclusaoField);
-	        
-	        // Status com ComboBox
-	        formPanel.add(new JLabel("Status"));
-	        String[] statusOptions = {"NÃO INICIADO", "EM ANDAMENTO", "CONCLUÍDO",};
-	        JComboBox<String> statusCombo = new JComboBox<>(statusOptions);
-	        formPanel.add(statusCombo);
-	        
-	        // Responsável
-	        formPanel.add(new JLabel("Responsável"));
-	        JTextField responsavelField = new JTextField("Nome do funcionário");
-	        formPanel.add(responsavelField);
-	        
-	        // Botões
-	        JPanel buttonPanel = new JPanel();
-	        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-	        
-	        JButton salvarButton = new JButton("Salvar");
-	        JButton sairButton = new JButton("Sair");
-	        
-	        buttonPanel.add(salvarButton);
-	        buttonPanel.add(sairButton);
-	        
-	        // Fazendo o Botão sair funcionar =)
-	        sairButton.addActionListener(new ActionListener() {
-	            
-	        	@Override
-	            public void actionPerformed(ActionEvent e) {
-	                System.exit(0);
-	            }
-	        });
-	        
-	        // Adicionando tudo ao painel principal
-	        mainPanel.add(tituloSecao);
-	        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-	        mainPanel.add(formPanel);
-	        mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-	        mainPanel.add(buttonPanel);
-	        
-	        add(mainPanel);
-	    }
+    public TelaTarefas() {
+        setTitle("Cadastro de Tarefas");
+        setSize(700, 500);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-	    public static void main(String[] args) {
-	        SwingUtilities.invokeLater(new Runnable() {
-	            @Override
-	            public void run() {
-	                new TelaTarefas().setVisible(true);
-	            }
-	        });
-	    }
-	}
+        JPanel painelPrincipal = new JPanel(new GridBagLayout());
+        painelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        JLabel lblTituloGeral = new JLabel("Formulário de Tarefas");
+        lblTituloGeral.setFont(new Font("SansSerif", Font.BOLD, 22));
+        lblTituloGeral.setHorizontalAlignment(SwingConstants.CENTER);
+        add(lblTituloGeral, BorderLayout.NORTH);
+
+        int linha = 0;
+
+        // Título da tarefa
+        gbc.gridx = 0; gbc.gridy = linha;
+        painelPrincipal.add(new JLabel("Título da Tarefa:"), gbc);
+        gbc.gridx = 1;
+        JTextField txtTitulo = new JTextField(25);
+        painelPrincipal.add(txtTitulo, gbc);
+
+        // Descrição
+        linha++;
+        gbc.gridx = 0; gbc.gridy = linha;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        painelPrincipal.add(new JLabel("Descrição:"), gbc);
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.3;
+        JTextArea txtDescricao = new JTextArea(4, 25);
+        txtDescricao.setLineWrap(true);
+        txtDescricao.setWrapStyleWord(true);
+        JScrollPane scrollDescricao = new JScrollPane(txtDescricao);
+        painelPrincipal.add(scrollDescricao, gbc);
+
+        // Reset weight e fill
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // Data Inicial
+        linha++;
+        gbc.gridx = 0; gbc.gridy = linha;
+        painelPrincipal.add(new JLabel("Data Inicial:"), gbc);
+        gbc.gridx = 1;
+        painelPrincipal.add(criarPainelData(), gbc);
+
+        // Prazo Final
+        linha++;
+        gbc.gridx = 0; gbc.gridy = linha;
+        painelPrincipal.add(new JLabel("Prazo Final:"), gbc);
+        gbc.gridx = 1;
+        painelPrincipal.add(criarPainelData(), gbc);
+
+        // Data Conclusão
+        linha++;
+        gbc.gridx = 0; gbc.gridy = linha;
+        painelPrincipal.add(new JLabel("Data Conclusão:"), gbc);
+        gbc.gridx = 1;
+        painelPrincipal.add(criarPainelData(), gbc);
+
+        // Status
+        linha++;
+        gbc.gridx = 0; gbc.gridy = linha;
+        painelPrincipal.add(new JLabel("Status:"), gbc);
+        gbc.gridx = 1;
+        JComboBox<String> comboStatus = new JComboBox<>(new String[]{"NÃO INICIADO", "EM ANDAMENTO", "CONCLUÍDO"});
+        painelPrincipal.add(comboStatus, gbc);
+
+        // Responsável
+        linha++;
+        gbc.gridx = 0; gbc.gridy = linha;
+        painelPrincipal.add(new JLabel("Responsável:"), gbc);
+        gbc.gridx = 1;
+        JTextField txtResponsavel = new JTextField();
+        painelPrincipal.add(txtResponsavel, gbc);
+
+        // Botões
+        linha++;
+        gbc.gridx = 0; gbc.gridy = linha; gbc.gridwidth = 2;
+        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        JButton btnSalvar = new JButton("Salvar");
+        JButton btnSair = new JButton("Sair");
+        painelBotoes.add(btnSalvar);
+        painelBotoes.add(btnSair);
+        painelPrincipal.add(painelBotoes, gbc);
+
+        // Ações
+        btnSair.addActionListener(e -> dispose());
+
+        btnSalvar.addActionListener((ActionEvent e) -> {
+            if (txtTitulo.getText().trim().isEmpty() || txtResponsavel.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Preencha os campos obrigatórios!", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String resumo = "Tarefa salva:\n"
+                    + "Título: " + txtTitulo.getText() + "\n"
+                    + "Descrição: " + txtDescricao.getText() + "\n"
+                    + "Responsável: " + txtResponsavel.getText();
+
+            JOptionPane.showMessageDialog(this, resumo, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+            txtTitulo.setText("");
+            txtDescricao.setText("");
+            // Os campos de data são limpados dentro do painel de data
+            limparPainelData((JPanel) painelPrincipal.getComponent(5));
+            limparPainelData((JPanel) painelPrincipal.getComponent(6));
+            limparPainelData((JPanel) painelPrincipal.getComponent(7));
+            txtResponsavel.setText("");
+            comboStatus.setSelectedIndex(0);
+        });
+
+        add(painelPrincipal, BorderLayout.CENTER);
+    }
+
+    private JPanel criarPainelData() {
+        JPanel painelData = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        JFormattedTextField txtDia = criarCampoData("##");
+        JFormattedTextField txtMes = criarCampoData("##");
+        JFormattedTextField txtAno = criarCampoData("####");
+
+        painelData.add(txtDia);
+        painelData.add(new JLabel("/"));
+        painelData.add(txtMes);
+        painelData.add(new JLabel("/"));
+        painelData.add(txtAno);
+
+        return painelData;
+    }
+
+    private JFormattedTextField criarCampoData(String mask) {
+        try {
+            MaskFormatter formatter = new MaskFormatter(mask);
+            formatter.setPlaceholderCharacter('_');
+            return new JFormattedTextField(formatter);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new JFormattedTextField();
+        }
+    }
+
+    private void limparPainelData(JPanel painelData) {
+        for (Component c : painelData.getComponents()) {
+            if (c instanceof JFormattedTextField) {
+                ((JFormattedTextField) c).setValue(null);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new TelaTarefas().setVisible(true));
+    }
+}

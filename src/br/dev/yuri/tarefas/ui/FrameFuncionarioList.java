@@ -1,110 +1,54 @@
 package br.dev.yuri.tarefas.ui;
 
-
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 import br.dev.yuri.tarefas.dao.FuncionarioDAO;
-import br.dev.yuri.tarefas.model.Funcionario;
 
+public class FrameFuncionarioList extends JFrame {
 
-public class FrameFuncionarioList {
+    private JTable tabela;
+    private DefaultTableModel modeloTabela;
 
-  private JLabel labelTitulo;
-  private JButton btnCadastro;
-  private JTable tabelaFuncionarios;
-  private JScrollPane scrollFuncionarios;
-  private DefaultTableModel modelFuncionarios;
-  private String[] colunas = {"CÓDIGO", "NOME", "CARGO"};
-  
-  public FrameFuncionarioList() {
-	  criarTela();
-  }
-  
-  private void criarTela() {
-	  
-	  JFrame tela = new JFrame();
-	  tela.setSize(500, 500);
-	  tela.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-	  tela.setLayout(null);
-	  tela.setLocationRelativeTo(null);
-	  tela.setTitle("Lista de Funcionarios");
-	  tela.setResizable(false);
-	  
-	  Container painel = tela.getContentPane();
-	  
-	  labelTitulo = new JLabel("Cadastro de Funcionarios");
-	  labelTitulo.setFont(new Font("Arial", Font.BOLD, 30));
-	  labelTitulo.setForeground(Color.RED);
-	  labelTitulo.setBounds(10, 10, 400, 40);
-	  
-	  //Criação da tabela
-	  modelFuncionarios = new DefaultTableModel(colunas, 5) {
-		  @Override
-		public boolean isCellEditable(int row, int column) {
-			return false;
-		}
-	  };
-	  
-	  
-	  
-	  tabelaFuncionarios = new JTable(modelFuncionarios);
-	  tabelaFuncionarios.getTableHeader().setReorderingAllowed(false);
-	  scrollFuncionarios = new JScrollPane(tabelaFuncionarios);
-	  scrollFuncionarios.setBounds(10, 60, 460, 300);
-	  
-	  carregarDados();
-	  
-	  btnCadastro = new JButton("Cadastrar");
-	  btnCadastro.setBounds(10, 380, 200, 40);
-	  
-	  btnCadastro.addActionListener(new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			new FrameFuncionario(tela);
-			carregarDados();
-			
-		}
-	});
-	  
-	  painel.add(labelTitulo);
-	  painel.add(scrollFuncionarios);
-	  painel.add(btnCadastro);
-	  
-	  tela.setVisible(true);
-	  
-  }
-  
-  private void carregarDados() {
-	  FuncionarioDAO dao = new FuncionarioDAO();
-	  List<Funcionario> funcionarios = dao.listar();
-	  
-	  Object[][] dados = new Object[funcionarios.size()][3];
-	  
-	  int i = 0;
-	  for (Funcionario f : funcionarios) {
-		  dados[i][0] = f.getMatricula();
-		  dados[i][1] = f.getNome();
-		  dados[i][2] = f.getCargo();
-		  i++;
-		  
-	  }
-	  
-	  
-	  modelFuncionarios.setDataVector(dados, colunas);
-  }
-	
+    public FrameFuncionarioList() {
+        setTitle("Lista de Funcionários");
+        setSize(600, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        JLabel titulo = new JLabel("Funcionários Cadastrados", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 18));
+        add(titulo, BorderLayout.NORTH);
+
+        String[] colunas = {"Matrícula", "Nome", "Cargo", "Salário"};
+        modeloTabela = new DefaultTableModel(colunas, 0);
+        tabela = new JTable(modeloTabela);
+        JScrollPane scrollPane = new JScrollPane(tabela);
+        add(scrollPane, BorderLayout.CENTER);
+
+        JButton btnAdicionar = new JButton("Adicionar Funcionário");
+        btnAdicionar.addActionListener((ActionEvent e) -> {
+            new FrameFuncionario(this); // Passa referência da tela atual
+        });
+
+        JPanel painelBotoes = new JPanel();
+        painelBotoes.add(btnAdicionar);
+        add(painelBotoes, BorderLayout.SOUTH);
+
+        carregarFuncionarios();
+
+        setVisible(true);
+    }
+
+    public void carregarFuncionarios() {
+        modeloTabela.setRowCount(0);
+        for (var f : new FuncionarioDAO().listar()) {
+            modeloTabela.addRow(new Object[]{
+                f.getMatricula(), f.getNome(), f.getCargo(), f.getSalario()
+            });
+        }
+    }
 }
