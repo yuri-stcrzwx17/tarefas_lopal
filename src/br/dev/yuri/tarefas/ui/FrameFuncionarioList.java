@@ -9,46 +9,53 @@ import br.dev.yuri.tarefas.dao.FuncionarioDAO;
 
 public class FrameFuncionarioList extends JFrame {
 
-    private JTable tabela;
-    private DefaultTableModel modeloTabela;
+	private JTable tabela;
+	private DefaultTableModel modeloTabela;
 
-    public FrameFuncionarioList() {
-        setTitle("Lista de Funcionários");
-        setSize(600, 400);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout());
+	public FrameFuncionarioList() {
+		setTitle("Lista de Funcionários");
+		setSize(600, 400);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLayout(new BorderLayout());
 
-        JLabel titulo = new JLabel("Funcionários Cadastrados", SwingConstants.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 18));
-        add(titulo, BorderLayout.NORTH);
+		JLabel titulo = new JLabel("Funcionários Cadastrados", SwingConstants.CENTER);
+		titulo.setFont(new Font("Arial", Font.BOLD, 18));
+		add(titulo, BorderLayout.NORTH);
 
-        String[] colunas = {"Matrícula", "Nome", "Cargo", "Salário"};
-        modeloTabela = new DefaultTableModel(colunas, 0);
-        tabela = new JTable(modeloTabela);
-        JScrollPane scrollPane = new JScrollPane(tabela);
-        add(scrollPane, BorderLayout.CENTER);
+		String[] colunas = { "Matrícula", "Nome", "Cargo", "Salário" };
 
-        JButton btnAdicionar = new JButton("Adicionar Funcionário");
-        btnAdicionar.addActionListener((ActionEvent e) -> {
-            new FrameFuncionario(this); // Passa referência da tela atual
-        });
+		modeloTabela = new DefaultTableModel(colunas, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Impede edição
+			}
+		};
 
-        JPanel painelBotoes = new JPanel();
-        painelBotoes.add(btnAdicionar);
-        add(painelBotoes, BorderLayout.SOUTH);
+		tabela = new JTable(modeloTabela);
+		tabela.getTableHeader().setReorderingAllowed(false); // Impede reordenação
 
-        carregarFuncionarios();
+		JScrollPane scrollPane = new JScrollPane(tabela);
+		add(scrollPane, BorderLayout.CENTER);
 
-        setVisible(true);
-    }
+		JButton btnAdicionar = new JButton("Adicionar Funcionário");
+		btnAdicionar.addActionListener((ActionEvent e) -> {
+			new FrameFuncionario(this); // Passa referência da tela atual
+		});
 
-    public void carregarFuncionarios() {
-        modeloTabela.setRowCount(0);
-        for (var f : new FuncionarioDAO().listar()) {
-            modeloTabela.addRow(new Object[]{
-                f.getMatricula(), f.getNome(), f.getCargo(), f.getSalario()
-            });
-        }
-    }
+		JPanel painelBotoes = new JPanel();
+		painelBotoes.add(btnAdicionar);
+		add(painelBotoes, BorderLayout.SOUTH);
+
+		carregarFuncionarios();
+
+		setVisible(true);
+	}
+
+	public void carregarFuncionarios() {
+		modeloTabela.setRowCount(0);
+		for (var f : new FuncionarioDAO().listar()) {
+			modeloTabela.addRow(new Object[] { f.getMatricula(), f.getNome(), f.getCargo(), f.getSalario() });
+		}
+	}
 }

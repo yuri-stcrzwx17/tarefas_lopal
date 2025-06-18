@@ -1,5 +1,7 @@
 package br.dev.yuri.tarefas.ui;
 
+import br.dev.yuri.tarefas.model.Funcionario;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
@@ -8,165 +10,178 @@ import java.text.ParseException;
 
 public class TelaTarefas extends JFrame {
 
-    public TelaTarefas() {
-        setTitle("Cadastro de Tarefas");
-        setSize(700, 500);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+	public TelaTarefas(FrameTarefasList frameTarefasList) {
+		setTitle("Cadastro de Tarefas");
+		setSize(700, 500);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLayout(new BorderLayout());
 
-        JPanel painelPrincipal = new JPanel(new GridBagLayout());
-        painelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+		JPanel painelPrincipal = new JPanel(new GridBagLayout());
+		painelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(8, 8, 8, 8);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel lblTituloGeral = new JLabel("Formulário de Tarefas");
-        lblTituloGeral.setFont(new Font("SansSerif", Font.BOLD, 22));
-        lblTituloGeral.setHorizontalAlignment(SwingConstants.CENTER);
-        add(lblTituloGeral, BorderLayout.NORTH);
+		JLabel lblTituloGeral = new JLabel("Formulário de Tarefas");
+		lblTituloGeral.setFont(new Font("SansSerif", Font.BOLD, 22));
+		lblTituloGeral.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblTituloGeral, BorderLayout.NORTH);
 
-        int linha = 0;
+		int linha = 0;
 
-        // Título da tarefa
-        gbc.gridx = 0; gbc.gridy = linha;
-        painelPrincipal.add(new JLabel("Título da Tarefa:"), gbc);
-        gbc.gridx = 1;
-        JTextField txtTitulo = new JTextField(25);
-        painelPrincipal.add(txtTitulo, gbc);
+		// Título
+		gbc.gridx = 0;
+		gbc.gridy = linha;
+		painelPrincipal.add(new JLabel("Título da Tarefa:"), gbc);
+		gbc.gridx = 1;
+		JTextField txtTitulo = new JTextField(25);
+		painelPrincipal.add(txtTitulo, gbc);
 
-        // Descrição
-        linha++;
-        gbc.gridx = 0; gbc.gridy = linha;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        painelPrincipal.add(new JLabel("Descrição:"), gbc);
-        gbc.gridx = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 0.3;
-        JTextArea txtDescricao = new JTextArea(4, 25);
-        txtDescricao.setLineWrap(true);
-        txtDescricao.setWrapStyleWord(true);
-        JScrollPane scrollDescricao = new JScrollPane(txtDescricao);
-        painelPrincipal.add(scrollDescricao, gbc);
+		// Descrição
+		linha++;
+		gbc.gridx = 0;
+		gbc.gridy = linha;
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		painelPrincipal.add(new JLabel("Descrição:"), gbc);
+		gbc.gridx = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 1.0;
+		gbc.weighty = 0.3;
+		JTextArea txtDescricao = new JTextArea(4, 25);
+		txtDescricao.setLineWrap(true);
+		txtDescricao.setWrapStyleWord(true);
+		JScrollPane scrollDescricao = new JScrollPane(txtDescricao);
+		painelPrincipal.add(scrollDescricao, gbc);
 
-        // Reset weight e fill
-        gbc.weightx = 0;
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weightx = 0;
+		gbc.weighty = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
 
-        // Data Inicial
-        linha++;
-        gbc.gridx = 0; gbc.gridy = linha;
-        painelPrincipal.add(new JLabel("Data Inicial:"), gbc);
-        gbc.gridx = 1;
-        painelPrincipal.add(criarPainelData(), gbc);
+		// Data Inicial
+		linha++;
+		gbc.gridx = 0;
+		gbc.gridy = linha;
+		painelPrincipal.add(new JLabel("Data Inicial:"), gbc);
+		gbc.gridx = 1;
+		JPanel dataInicialPanel = criarPainelData();
+		painelPrincipal.add(dataInicialPanel, gbc);
 
-        // Prazo Final
-        linha++;
-        gbc.gridx = 0; gbc.gridy = linha;
-        painelPrincipal.add(new JLabel("Prazo Final:"), gbc);
-        gbc.gridx = 1;
-        painelPrincipal.add(criarPainelData(), gbc);
+		// Prazo Final
+		linha++;
+		gbc.gridx = 0;
+		gbc.gridy = linha;
+		painelPrincipal.add(new JLabel("Prazo Final:"), gbc);
+		gbc.gridx = 1;
+		JPanel prazoFinalPanel = criarPainelData();
+		painelPrincipal.add(prazoFinalPanel, gbc);
 
-        // Data Conclusão
-        linha++;
-        gbc.gridx = 0; gbc.gridy = linha;
-        painelPrincipal.add(new JLabel("Data Conclusão:"), gbc);
-        gbc.gridx = 1;
-        painelPrincipal.add(criarPainelData(), gbc);
+		// Data Conclusão
+		linha++;
+		gbc.gridx = 0;
+		gbc.gridy = linha;
+		painelPrincipal.add(new JLabel("Data Conclusão:"), gbc);
+		gbc.gridx = 1;
+		JPanel dataConclusaoPanel = criarPainelData();
+		painelPrincipal.add(dataConclusaoPanel, gbc);
 
-        // Status
-        linha++;
-        gbc.gridx = 0; gbc.gridy = linha;
-        painelPrincipal.add(new JLabel("Status:"), gbc);
-        gbc.gridx = 1;
-        JComboBox<String> comboStatus = new JComboBox<>(new String[]{"NÃO INICIADO", "EM ANDAMENTO", "CONCLUÍDO"});
-        painelPrincipal.add(comboStatus, gbc);
+		// Status
+		linha++;
+		gbc.gridx = 0;
+		gbc.gridy = linha;
+		painelPrincipal.add(new JLabel("Status:"), gbc);
+		gbc.gridx = 1;
+		JComboBox<String> comboStatus = new JComboBox<>(new String[] { "NÃO INICIADO", "EM ANDAMENTO", "CONCLUÍDO" });
+		painelPrincipal.add(comboStatus, gbc);
 
-        // Responsável
-        linha++;
-        gbc.gridx = 0; gbc.gridy = linha;
-        painelPrincipal.add(new JLabel("Responsável:"), gbc);
-        gbc.gridx = 1;
-        JTextField txtResponsavel = new JTextField();
-        painelPrincipal.add(txtResponsavel, gbc);
+		// Responsável
+		linha++;
+		gbc.gridx = 0;
+		gbc.gridy = linha;
+		painelPrincipal.add(new JLabel("Responsável:"), gbc);
+		gbc.gridx = 1;
 
-        // Botões
-        linha++;
-        gbc.gridx = 0; gbc.gridy = linha; gbc.gridwidth = 2;
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        JButton btnSalvar = new JButton("Salvar");
-        JButton btnSair = new JButton("Sair");
-        painelBotoes.add(btnSalvar);
-        painelBotoes.add(btnSair);
-        painelPrincipal.add(painelBotoes, gbc);
+		JComboBox<Funcionario> comboResponsavel = new JComboBox<>();
+		painelPrincipal.add(comboResponsavel, gbc);
 
-        // Ações
-        btnSair.addActionListener(e -> dispose());
+		// Botões
+		linha++;
+		gbc.gridx = 0;
+		gbc.gridy = linha;
+		gbc.gridwidth = 2;
+		JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		JButton btnSalvar = new JButton("Salvar");
+		JButton btnSair = new JButton("Sair");
+		painelBotoes.add(btnSalvar);
+		painelBotoes.add(btnSair);
+		painelPrincipal.add(painelBotoes, gbc);
 
-        btnSalvar.addActionListener((ActionEvent e) -> {
-            if (txtTitulo.getText().trim().isEmpty() || txtResponsavel.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Preencha os campos obrigatórios!", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+		btnSair.addActionListener(e -> dispose());
 
-            String resumo = "Tarefa salva:\n"
-                    + "Título: " + txtTitulo.getText() + "\n"
-                    + "Descrição: " + txtDescricao.getText() + "\n"
-                    + "Responsável: " + txtResponsavel.getText();
+		btnSalvar.addActionListener((ActionEvent e) -> {
+			if (txtTitulo.getText().trim().isEmpty() || comboResponsavel.getSelectedItem() == null) {
+				JOptionPane.showMessageDialog(this, "Preencha os campos obrigatórios!", "Erro",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 
-            JOptionPane.showMessageDialog(this, resumo, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+			String resumo = "Tarefa salva:\n" + "Título: " + txtTitulo.getText() + "\n" + "Descrição: "
+					+ txtDescricao.getText() + "\n" + "Responsável: " + comboResponsavel.getSelectedItem();
 
-            txtTitulo.setText("");
-            txtDescricao.setText("");
-            // Os campos de data são limpados dentro do painel de data
-            limparPainelData((JPanel) painelPrincipal.getComponent(5));
-            limparPainelData((JPanel) painelPrincipal.getComponent(6));
-            limparPainelData((JPanel) painelPrincipal.getComponent(7));
-            txtResponsavel.setText("");
-            comboStatus.setSelectedIndex(0);
-        });
+			JOptionPane.showMessageDialog(this, resumo, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
-        add(painelPrincipal, BorderLayout.CENTER);
-    }
+			txtTitulo.setText("");
+			txtDescricao.setText("");
+			limparPainelData(dataInicialPanel);
+			limparPainelData(prazoFinalPanel);
+			limparPainelData(dataConclusaoPanel);
+			comboResponsavel.setSelectedIndex(-1);
+			comboStatus.setSelectedIndex(0);
+		});
 
-    private JPanel criarPainelData() {
-        JPanel painelData = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        JFormattedTextField txtDia = criarCampoData("##");
-        JFormattedTextField txtMes = criarCampoData("##");
-        JFormattedTextField txtAno = criarCampoData("####");
+		add(painelPrincipal, BorderLayout.CENTER);
+	}
 
-        painelData.add(txtDia);
-        painelData.add(new JLabel("/"));
-        painelData.add(txtMes);
-        painelData.add(new JLabel("/"));
-        painelData.add(txtAno);
+	public TelaTarefas(String responsavel, String dataInicial, String prazo, String status) {
+		// Construtor alternativo não implementado
+	}
 
-        return painelData;
-    }
+	private JPanel criarPainelData() {
+		JPanel painelData = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		JFormattedTextField txtDia = criarCampoData("##");
+		JFormattedTextField txtMes = criarCampoData("##");
+		JFormattedTextField txtAno = criarCampoData("####");
 
-    private JFormattedTextField criarCampoData(String mask) {
-        try {
-            MaskFormatter formatter = new MaskFormatter(mask);
-            formatter.setPlaceholderCharacter('_');
-            return new JFormattedTextField(formatter);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return new JFormattedTextField();
-        }
-    }
+		painelData.add(txtDia);
+		painelData.add(new JLabel("/"));
+		painelData.add(txtMes);
+		painelData.add(new JLabel("/"));
+		painelData.add(txtAno);
 
-    private void limparPainelData(JPanel painelData) {
-        for (Component c : painelData.getComponents()) {
-            if (c instanceof JFormattedTextField) {
-                ((JFormattedTextField) c).setValue(null);
-            }
-        }
-    }
+		return painelData;
+	}
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new TelaTarefas().setVisible(true));
-    }
+	private JFormattedTextField criarCampoData(String mask) {
+		try {
+			MaskFormatter formatter = new MaskFormatter(mask);
+			formatter.setPlaceholderCharacter('_');
+			return new JFormattedTextField(formatter);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return new JFormattedTextField();
+		}
+	}
+
+	private void limparPainelData(JPanel painelData) {
+		for (Component c : painelData.getComponents()) {
+			if (c instanceof JFormattedTextField) {
+				((JFormattedTextField) c).setValue(null);
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(() -> new TelaTarefas(null).setVisible(true));
+	}
 }
